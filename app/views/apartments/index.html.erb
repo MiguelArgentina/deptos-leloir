@@ -1,0 +1,18 @@
+<% content_for :title, "Apartments" %>
+
+<div class="w-full max-w-6xl mx-auto">
+
+  <h1 class="text-3xl font-bold text-slate-800 tracking-tight text-center mt-0 mb-8">
+    Departamentos disponibles
+  </h1>
+
+  <% if @apartments.any? %>
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <% @apartments.each do |apartment| %>
+        <%= render apartment %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-slate-500 text-lg mt-20">No apartments found.</p>
+  <% end %>
+</div>

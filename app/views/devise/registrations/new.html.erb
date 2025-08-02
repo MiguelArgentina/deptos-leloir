@@ -1,0 +1,49 @@
+<div class="bg-gray-100 flex justify-center items-center h-screen relative overflow-hidden">
+
+  <!-- Background image for small/medium screens -->
+  <div class="absolute inset-0 lg:hidden">
+    <%= image_tag 'login_image.png',
+                  class: "w-full h-full object-cover opacity-30", alt: "Background", aria: false %>
+  </div>
+
+  <!-- Left image for large screens -->
+  <div class="w-1/2 h-screen hidden lg:block">
+    <%= image_tag 'login_image.png', class: 'object-cover w-full h-full', alt: "Login Image" %>
+  </div>
+
+  <!-- Right: Registration Form -->
+  <div class="relative z-10 bg-white/80 backdrop-blur-md rounded-lg lg:p-36 md:p-24 sm:p-10 p-6 w-full max-w-md lg:w-1/2 shadow-md">
+    <h1 class="text-2xl font-semibold mb-4 text-slate-700">Crear cuenta</h1>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="mb-4">
+        <%= f.label :email, class: "block text-gray-600" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                          class: "w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password, 'Contraseña',class: "block text-gray-600" %>
+        <% if @minimum_password_length %>
+          <em class="text-xs text-gray-500">(<%= @minimum_password_length %> caracteres mínimo)</em>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password",
+                             class: "w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 mt-1" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password_confirmation, 'Confirmar contraseña',class: "block text-gray-600" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                             class: "w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" %>
+      </div>
+
+      <%= f.submit "Registrarme", class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full" %>
+    <% end %>
+
+    <div class="mt-6 text-blue-500 text-center">
+      <%= link_to "¿Ya tienes una cuenta? Iniciar sesión", new_session_path(resource_name), class: "hover:underline" %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="bg-gray-100 flex justify-center items-center h-screen relative overflow-hidden">
+
+  <!-- Background image for small/medium screens -->
+  <div class="absolute inset-0 lg:hidden">
+    <%= image_tag 'login_image.png',
+                  class: "w-full h-full object-cover opacity-30", alt: "Background", aria: false %>
+  </div>
+
+  <!-- Left image for large screens -->
+  <div class="w-1/2 h-screen hidden lg:block">
+    <%= image_tag 'login_image.png', class: 'object-cover w-full h-full', alt: "Edit Profile Image" %>
+  </div>
+
+  <!-- Right: Edit Profile Form -->
+  <div class="relative z-10 bg-white/80 backdrop-blur-md rounded-lg lg:p-36 md:p-24 sm:p-10 p-6 w-full max-w-md lg:w-1/2 shadow-md">
+    <h1 class="text-2xl font-semibold mb-4 text-slate-700">Editar perfil</h1>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="mb-4">
+        <%= f.label :email, class: "block text-gray-600" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                          class: "w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div class="mb-4 text-sm text-gray-500">
+          Actualmente esperando confirmación para: <strong><%= resource.unconfirmed_email %></strong>
+        </div>
+      <% end %>
+
+      <div class="mb-4">
+        <%= f.label :password, "Nueva contraseña", class: "block text-gray-600" %>
+        <em class="text-xs text-gray-500">(Dejar en blanco si no desea cambiarla)</em>
+        <%= f.password_field :password, autocomplete: "new-password",
+                             class: "w-full border border-gray-300 rounded-md py-2 px-3 mt-1 focus:outline-none focus:border-blue-500" %>
+        <% if @minimum_password_length %>
+          <em class="text-xs text-gray-500 mt-1 block">(<%= @minimum_password_length %> caracteres mínimo)</em>
+        <% end %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password_confirmation, 'Confirmar nueva contraseña', class: "block text-gray-600" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                             class: "w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :current_password, 'Contraseña actual', class: "block text-gray-600" %>
+        <em class="text-xs text-gray-500">(Necesaria para confirmar los cambios)</em>
+        <%= f.password_field :current_password, autocomplete: "current-password",
+                             class: "w-full border border-gray-300 rounded-md py-2 px-3 mt-1 focus:outline-none focus:border-blue-500" %>
+      </div>
+
+      <%= f.submit "Actualizar", class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full" %>
+    <% end %>
+
+    <div class="mt-6 text-center">
+      <h3 class="text-sm text-gray-700 mb-2">¿No estás conforme?</h3>
+      <%= button_to "Eliminar mi cuenta", registration_path(resource_name),
+                    method: :delete,
+                    data: { confirm: "¿Estás seguro?", turbo_confirm: "¿Estás seguro?" },
+                    class: "text-sm text-red-600 hover:underline" %>
+    </div>
+
+    <div class="mt-4 text-blue-500 text-center">
+      <%= link_to "Volver", root_path, class: "hover:underline" %>
+    </div>
+  </div>
+</div>

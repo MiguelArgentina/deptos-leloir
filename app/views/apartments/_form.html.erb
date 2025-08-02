@@ -1,0 +1,106 @@
+<div class="max-w-lg mx-auto my-10 rounded-xl shadow-2xl border border-slate-100 p-8">
+  <%= form_with(model: apartment, class: "space-y-6") do |form| %>
+    <% if apartment.errors.any? %>
+      <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+        <h2><%= pluralize(apartment.errors.count, "error") %> prohibited this apartment from being saved:</h2>
+        <ul class="list-disc ml-6">
+          <% apartment.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Title -->
+    <div class="px-2">
+      <%= form.label :title, 'Nombre',class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.text_field :title, style: "background-color: rgba(198, 219, 245,0.9);", class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full placeholder-gray-400",
+        {"border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100": apartment.errors[:title].none?,
+         "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100": apartment.errors[:title].any?}
+      ] %>
+    </div>
+
+    <!-- Description -->
+    <div class="px-2 mt-2">
+      <%= form.label :description, 'Descripción', class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.text_area :description, style: "background-color: rgba(198, 219, 245,0.9);", rows: 4, class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full bg-white placeholder-gray-400 resize-none",
+        {"border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100": apartment.errors[:description].none?,
+         "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100": apartment.errors[:description].any?}
+      ] %>
+    </div>
+
+    <!-- Location -->
+    <div class="px-2 mt-2">
+      <%= form.label :location, 'Ubicación', class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.text_field :location, style: "background-color: rgba(198, 219, 245,0.9);", class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full bg-white placeholder-gray-400",
+        {"border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100": apartment.errors[:location].none?,
+         "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100": apartment.errors[:location].any?}
+      ] %>
+    </div>
+
+    <!-- Contact Name -->
+    <div class="px-2 mt-2">
+      <%= form.label :contact_name, 'Nombre del contacto', class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.text_field :contact_name, style: "background-color: rgba(198, 219, 245,0.9);", class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full placeholder-gray-400"
+      ] %>
+    </div>
+
+    <!-- Contact Phone -->
+    <div class="px-2 mt-2">
+      <%= form.label :contact_phone, 'Teléfono de contacto', class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.text_field :contact_phone, style: "background-color: rgba(198, 219, 245,0.9);", class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full placeholder-gray-400"
+      ] %>
+    </div>
+
+    <!-- Contact Email -->
+    <div class="px-2 mt-2">
+      <%= form.label :contact_email, 'Email de contacto', class:"font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.email_field :contact_email, style: "background-color: rgba(198, 219, 245,0.9);", class: [
+        "block shadow-sm rounded-lg border px-4 py-3 mt-2 w-full placeholder-gray-400"
+      ] %>
+    </div>
+
+    <% if apartment.photos.attached? %>
+      <div class="px-2 mt-3">
+        <label class="mb-2 font-medium text-stone-200 rounded px-2 py-1 inline-block"
+               style="background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)">
+          Fotos cargadas:
+        </label>
+        <div class="flex flex-wrap gap-4">
+          <% apartment.photos.each do |photo| %>
+            <div class="relative w-32 h-24 border rounded-lg overflow-hidden group bg-slate-50">
+              <%= image_tag photo.url(transformation: [{ height: 128, width: 96 }]), class: "object-cover w-full h-full" %>
+              <label class="absolute top-1 right-1 bg-white bg-opacity-90 rounded p-1 cursor-pointer border border-red-200">
+                <%= check_box_tag "apartment[remove_photo_ids][]", photo.id, false %>
+                <span class="text-xs text-red-600">Eliminar</span>
+              </label>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- File Field -->
+    <div class="px-2">
+      <%= form.label :photos, 'Cargar Fotos', class:"mb-2 font-medium text-stone-200 rounded px-2 mt-3 inline-block",
+                     style:"background-color: rgba(22, 50, 84, 0.7); color: rgb(110, 159, 219)" %>
+      <%= form.file_field :photos, multiple: true, direct_upload: true, class: "block w-full border border-gray-300 rounded-lg mt-1 bg-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500" %>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="px-2 mt-3">
+      <%= form.submit apartment.persisted? ? "Guardar" : "Crear", class: "w-full sm:w-auto rounded-lg px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-md transition" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,16 @@
+.medium-zoom-overlay,
+.medium-zoom-image--opened {
+    z-index: 50 !important;
+}
+.carousel-control {
+    z-index: 10 !important;
+}
+
+.medium-zoom-image--opened {
+    max-height: 95vh !important;
+    width: auto !important;
+    max-width: 98vw !important;
+    object-fit: contain !important;
+    /* Remove fixed heights if you use Tailwind h-* on the card */
+    height: auto !important;
+}

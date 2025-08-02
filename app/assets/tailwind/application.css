@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-rose-50 text-slate-800;
+    }
+
+    h1, h2, h3, h4 {
+        @apply text-slate-700;
+    }
+}

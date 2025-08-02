@@ -1,0 +1,8 @@
+<% flash.each do |type, message| %>
+  <div
+    class="flash-message fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-3 rounded-md shadow-md
+           <%= flash_class(type) %> transition-opacity duration-500"
+  >
+    <p class="text-sm font-medium"><%= message %></p>
+  </div>
+<% end %>
