@@ -1,26 +1,32 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["carousel"]
+    static targets = ["slide"]
 
     connect() {
         this.index = 0
-        this.update()
+        this.showCurrentSlide()
     }
 
     next() {
-        const total = this.carouselTarget.children.length
-        this.index = (this.index + 1) % total
-        this.update()
+        this.index = (this.index + 1) % this.slideTargets.length
+        this.showCurrentSlide()
     }
 
     prev() {
-        const total = this.carouselTarget.children.length
-        this.index = (this.index - 1 + total) % total
-        this.update()
+        this.index = (this.index - 1 + this.slideTargets.length) % this.slideTargets.length
+        this.showCurrentSlide()
     }
 
-    update() {
-        this.carouselTarget.style.transform = `translateX(-${this.index * 100}%)`
+    showCurrentSlide() {
+        this.slideTargets.forEach((slide, i) => {
+            if (i === this.index) {
+                slide.classList.remove("opacity-0", "pointer-events-none")
+                slide.classList.add("opacity-100")
+            } else {
+                slide.classList.remove("opacity-100")
+                slide.classList.add("opacity-0", "pointer-events-none")
+            }
+        })
     }
 }

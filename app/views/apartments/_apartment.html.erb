@@ -1,40 +1,35 @@
 <div class="bg-white my-2 shadow-lg rounded-xl overflow-hidden border border-slate-100 transition hover:shadow-xl">
-  <!-- Images carrousel -->
   <% if apartment.photos.attached? %>
-    <div data-controller="carousel image-zoom" class="relative w-full overflow-hidden">
-      <div data-carousel-target="carousel"
-           class="flex transition-transform duration-500 ease-in-out w-full"
-           style="transform: translateX(0%)">
-        <% apartment.photos.each do |photo| %>
-          <div class="w-full shrink-0">
-            <%= image_tag photo.url(transformation: [{ height: 200, width: 400 }]),
-                          data: {
-                            "image-zoom-target": "zoomable",
-                            zoomable: "",
-                            "zoom-src": photo.url(transformation: [{ height: 800 }])
-                          },
-                          class: "w-full object-cover" %>
-          </div>
-        <% end %>
+    <div data-controller="carousel" class="relative">
+      <div id="gallery-<%= apartment.id %>" class="pswp-gallery" data-pswp-gallery>
+        <div data-carousel-target="container" class="relative overflow-hidden h-48">
+          <% apartment.photos.each_with_index do |photo, index| %>
+            <% blob = photo.blob %>
+            <% width = blob.metadata[:width] || 1200 %>
+            <% height = blob.metadata[:height] || 800 %>
+
+            <a
+              href="<%= photo.url(transformation: [{ width: 1200 }]) %>"
+              data-pswp-width="<%= width %>"
+              data-pswp-height="<%= height %>"
+              target="_blank"
+              data-carousel-target="slide"
+              class="absolute inset-0 transition-opacity duration-500 <%= index.zero? ? 'opacity-100' : 'opacity-0 pointer-events-none' %>"
+            >
+              <%= image_tag photo.url(transformation: [{ width: 400, height: 300 }]),
+                            class: "w-full h-48 object-cover rounded-md" %>
+            </a>
+          <% end %>
+        </div>
       </div>
 
-      <!-- Prev Button -->
-      <button type="button"
-              data-action="click->carousel#prev"
-              class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white text-gray-600 px-2 py-1 z-10">
-        ‹
-      </button>
-
-      <!-- Next Button -->
-      <button type="button"
-              data-action="click->carousel#next"
-              class="carousel-control absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white text-gray-600 px-2 py-1 z-10">
-        ›
-      </button>
+      <!-- Carousel controls -->
+      <button type="button" data-action="click->carousel#prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/70 px-2 py-1">‹</button>
+      <button type="button" data-action="click->carousel#next" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/70 px-2 py-1">›</button>
     </div>
-  <% end %>
 
-  <!-- End of Images carrousel -->
+
+<% end %>
 
   <div class="p-5 space-y-2">
     <h2 class="text-xl font-semibold text-slate-700"><%= apartment.title %></h2>
@@ -43,7 +38,6 @@
 
     <div class="pt-4 flex flex-wrap gap-3">
       <% unless controller_name == "apartments" && action_name == "show" %>
-        <!-- View -->
         <%= link_to apartment, class: "inline-flex items-center gap-x-2 rounded-md bg-transparent px-3.5 py-2.5 text-sm font-semibold text-gray-500 hover:text-blue-600 hover:bg-gray-100 transition" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor" class="w-6 h-6 text-blue-300">
@@ -62,41 +56,39 @@
         <%= link_to "Ver en Google Maps", "https://www.google.com/maps/search/?api=1&query=#{CGI.escape(apartment.location)}", target: "_blank", rel: "noopener", class: "text-blue-700 underline" %>
       <% end %>
 
-
       <% if admin_signed_in? %>
         <div class="inline-flex">
-        <!-- Edit -->
-        <%= link_to edit_apartment_path(apartment), class: "inline-flex items-center gap-x-2 rounded-md bg-transparent px-3.5 py-2.5 text-sm font-semibold text-gray-500 hover:text-yellow-700 hover:bg-gray-100 transition" do %>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-               stroke="currentColor" class="w-6 h-6 text-yellow-300">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16.862 4.487l1.687-1.687a1.875 1.875 0 1 1 2.652 2.652L7.5 19.125H3.75V15.37L16.862 4.487z" />
-          </svg>
-          <span>Editar</span>
-        <% end %>
+          <%= link_to edit_apartment_path(apartment), class: "inline-flex items-center gap-x-2 rounded-md bg-transparent px-3.5 py-2.5 text-sm font-semibold text-gray-500 hover:text-yellow-700 hover:bg-gray-100 transition" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 text-yellow-300">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.687a1.875 1.875 0 1 1 2.652 2.652L7.5 19.125H3.75V15.37L16.862 4.487z" />
+            </svg>
+            <span>Editar</span>
+          <% end %>
 
-        <!-- Delete -->
-        <%= button_to apartment, method: :delete, data: { turbo_confirm: "Are you sure?" },
-                      class: "inline-flex items-center gap-x-2 rounded-md bg-transparent px-3.5 py-2.5 text-sm font-semibold text-gray-500 hover:text-red-600 hover:bg-gray-100 transition" do %>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-               stroke="currentColor" class="w-6 h-6 text-red-300">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          <span>Eliminar</span>
-        <% end %>
+          <%= button_to apartment, method: :delete, data: { turbo_confirm: "Are you sure?" },
+                        class: "inline-flex items-center gap-x-2 rounded-md bg-transparent px-3.5 py-2.5 text-sm font-semibold text-gray-500 hover:text-red-600 hover:bg-gray-100 transition" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6 text-red-300">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>Eliminar</span>
+          <% end %>
         </div>
       <% end %>
-
-
     </div>
   </div>
 </div>
-<script>
-    document.addEventListener('medium-zoom:opened', () => {
-        document.body.classList.add('zoom-active');
+
+<script type="module">
+    import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@5/dist/photoswipe-lightbox.esm.min.js';
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '.pswp-gallery',
+        children: 'a',
+        pswpModule: () => import('https://unpkg.com/photoswipe@5/dist/photoswipe.esm.min.js'),
     });
 
-    document.addEventListener('medium-zoom:closed', () => {
-        document.body.classList.remove('zoom-active');
-    });
+    lightbox.init();
 </script>
